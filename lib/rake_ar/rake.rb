@@ -8,7 +8,11 @@ def rake_ar
 end
 
 namespace :db do
-  task :load_models do
+  task :connect_db do
+    rake_ar.connect_db
+  end
+
+  task :load_models => [:connect_db] do
     rake_ar.load_models
   end
 

@@ -9,12 +9,20 @@ describe RakeAR do
   end
 
   before(:each) do
-    @rake_ar = RakeAR.new migration_path: 'MIG_PATH',
+    @rake_ar = RakeAR.new connect_file:   'CONNECT_FILE',
+                          migration_path: 'MIG_PATH',
                           seed_file:      'SEED_FILE',
                           schema_file:    'SCHEMA_FILE',
                           models_path:    'MODELS_PATH'
   end
   
+  context 'on create connection' do
+    it 'should return correct path' do
+      @rake_ar.stub(:require)
+      @rake_ar.connect_db.should == 'CONNECT_FILE'
+    end
+  end
+
   context 'on model path' do
     it 'should return correct path' do
       @rake_ar.load_models.should == 'MODELS_PATH/*.rb'

@@ -1,9 +1,11 @@
 require 'rake_ar/version'
 require 'active_support/inflector'
+require 'fileutils'
 
 class RakeAR
   def initialize(settings = {})
     @settings = {
+      connect_file:   "#{Dir.pwd}/db/connect.rb",
       migration_path: "#{Dir.pwd}/db/migrate/",
       seed_file:      "#{Dir.pwd}/db/seeds.rb",
       schema_file:    "#{Dir.pwd}/db/schema.rb",
@@ -11,6 +13,12 @@ class RakeAR
     }.merge(settings)
 
     FileUtils.mkdir_p(@settings[:migration_path])
+  end
+
+  def connect_db
+    @settings[:connect_file].tap do |connection|
+      require connection
+    end
   end
 
   def load_models

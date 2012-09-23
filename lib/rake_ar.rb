@@ -1,18 +1,28 @@
 require 'rake_ar/version'
+require 'active_support/inflector'
 
 class RakeAR
   def initialize(settings = {})
     @settings = {
       migration_path: "#{Dir.pwd}/db/migrate/",
       seed_file:      "#{Dir.pwd}/db/seeds.rb",
-      schema_file:    "#{Dir.pwd}/db/schema.rb"
+      schema_file:    "#{Dir.pwd}/db/schema.rb",
+      models_path:    "#{Dir.pwd}/app/models"
     }.merge(settings)
 
     FileUtils.mkdir_p(@settings[:migration_path])
   end
 
+  def load_models
+    "#{@settings[:models_path]}/*.rb".tap do |path|
+      Dir[path].each do |model|
+        require model
+      end
+    end
+  end
+
   def dump_schema
-    File.open(@settings[:schema_file], "w:utf-8") do |schema_file|
+    File.open(@settings[:schema_file], 'w:utf-8') do |schema_file|
       ActiveRecord::SchemaDumper.dump(ActiveRecord::Base.connection, schema_file)
     end 
   end
@@ -39,9 +49,8 @@ class RakeAR
   end
 
   def migrate_db
-    ActiveRecord::Migrator.
-      migrate 'db/migrate', 
-              ENV['VERSION'] ? ENV['VERSION'].to_i : nil
+    version = ENV['VERSION'] ? ENV['VERSION'].to_i : nil
+    ActiveRecord::Migrator.migrate(@settings[:migration_path], version)
   end
 
   def create_migration
@@ -52,7 +61,7 @@ class RakeAR
     migration_file = "#{version}_#{name}.rb"
     migration_name = name.gsub(/_(.)/) { $1.upcase }.gsub(/^(.)/) { $1.upcase }
 
-    open("#{@settings[:migration_path]}/#{migration_file}", 'w') do |migration|
+    File.open("#{@settings[:migration_path]}/#{migration_file}", 'w') do |migration|
       migration << (<<-EOS).gsub('      ', '')
       class #{migration_name} < ActiveRecord::Migration
         def self.up

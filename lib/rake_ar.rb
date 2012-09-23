@@ -5,7 +5,7 @@ require 'fileutils'
 class RakeAR
   def initialize(settings = {})
     @settings = {
-      connect_file:   "#{Dir.pwd}/db/connect.rb",
+      connect_file:   "#{Dir.pwd}/db/connection.rb",
       migration_path: "#{Dir.pwd}/db/migrate/",
       seed_file:      "#{Dir.pwd}/db/seeds.rb",
       schema_file:    "#{Dir.pwd}/db/schema.rb",

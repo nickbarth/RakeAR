@@ -11,21 +11,28 @@ Add a require to your `Rakefile`
 
     require 'rake_ar/rake'
 
-Now you will have some rake tasks to manage your ActiveRecord database.
+You will now have some rake tasks to manage your ActiveRecord database.
 
     rake -T
 
-    rake assets:compile       # Compiles both CSS and Javascript
-    rake assets:check         # Checks that the configuration paths are valid
-    rake assets:compile_js    # Compiles Javascript files into a single minified Javascript file
-    rake assets:compile_css   # Compiles CSS files into a single minified CSS file
+    rake db:clear             # Clear all database records
+    rake db:console           # Loads IRB with your ActiveRecord models and a database connection
+    rake db:create_migration  # Creates a new ActiveRecord migration
+    rake db:drop              # Drops all database tables
+    rake db:load              # Loads your schema file into the database
+    rake db:migrate           # Migrates your database
+    rake db:regen             # Regenerates the database from migrations
+    rake db:reseed            # Reloads the database from your schema file and reseeds it
+    rake db:schema            # Dumps a new schema file
+    rake db:seed              # Loads your seed data file
 
 To configure them just initialize a new instance of RakeAR in your `Rakefile` to override the defaults.
 
-    @rake_assets = RakeAssets.new js_path:      'app/assets/scripts',                        # Location of application.js
-                                  js_compiled:  "#{Dir.pwd}/public/scripts/application.js",  # Path to compile JS too
-                                  css_path:     'app/assets/styles',                         # Path of application.css file
-                                  css_compiled: "#{Dir.pwd}/public/css/style.css",           # Path to compile CSS too
+    @rake_ar = RakeAR.new connect_file:   "#{Dir.pwd}/db/connect.rb", # File containing a valid ActiveRecord connection
+                          migration_path: "#{Dir.pwd}/db/migrate/",   # Path to migrations folder
+                          seed_file:      "#{Dir.pwd}/db/seeds.rb",   # Ruby database seed script
+                          schema_file:    "#{Dir.pwd}/db/schema.rb",  # Schema file the database is written too and loaded from
+                          models_path:    "#{Dir.pwd}/app/models"     # Path to the applications ActiveRecord models
 
 ### License
 WTFPL &copy; 2012 Nick Barth

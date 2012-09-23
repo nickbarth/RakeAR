@@ -16,7 +16,7 @@ namespace :db do
     rake_ar.load_models
   end
 
-  desc 'Load the console'
+  desc 'Loads IRB with your ActiveRecord models and a database connection'
   task :console => [:load_models] do
     require 'irb'
     require 'irb/completion'
@@ -24,17 +24,17 @@ namespace :db do
     IRB.start
   end
 
-  desc 'Dump a schema file'
+  desc 'Dumps a new schema file'
   task :schema => [:load_models] do
     rake_ar.dump_schema
   end
 
-  desc 'Load a schema.rb file into the database'
+  desc 'Loads your schema file into the database'
   task :load => [:load_models] do
     rake_ar.load_schema
   end
 
-  desc 'Load the seed data'
+  desc 'Loads your seed data file'
   task :seed => [:load_models] do
     rake_ar.seed_db
   end
@@ -44,22 +44,22 @@ namespace :db do
     rake_ar.clear_db
   end
 
-  desc 'Drop all database tables'
+  desc 'Drops all database tables'
   task :drop => [:load_models] do
     rake_ar.drop_db
   end
 
-  desc 'migrate your database'
+  desc 'Migrates your database'
   task :migrate => [:load_models] do
     rake_ar.migrate_db
   end
 
-  desc 'create an ActiveRecord migration in ./db/migrate'
+  desc 'Creates a new ActiveRecord migration'
   task :create_migration => [:load_models] do
     rake_ar.create_migration
   end
 
-  desc 'Reload and reseed the database from schema'
+  desc 'Reloads the database from your schema file and reseeds it'
   task :reseed => [:load_models] do
     Rake::Task['db:load'].invoke
     Rake::Task['db:seed'].invoke

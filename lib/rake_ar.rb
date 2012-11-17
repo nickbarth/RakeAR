@@ -72,10 +72,10 @@ class RakeAR
     File.open("#{@settings[:migration_path]}/#{migration_file}", 'w') do |migration|
       migration << (<<-EOS).gsub('      ', '')
       class #{migration_name} < ActiveRecord::Migration
-        def self.up
+        def up
         end
 
-        def self.down
+        def down
         end
       end
       EOS

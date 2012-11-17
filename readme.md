@@ -1,4 +1,5 @@
-# RakeAR
+# RakeAR [![Build Status](https://secure.travis-ci.org/nickbarth/RakeAR.png?branch=master)](https://travis-ci.org/nickbarth/RakeAR)
+
 RakeAR is a Ruby Gem containing some common Rake tasks to help manage your ActiveRecord database independant of Rails.
 
 # How To Use
